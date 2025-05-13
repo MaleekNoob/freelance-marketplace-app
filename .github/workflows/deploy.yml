@@ -9,18 +9,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      continue-on-error: true  # Fallback if checkout fails
-    - name: Fallback to manual pull
-      run: |
-        Write-Output "Ensuring latest code..."
-        if (Test-Path "./freelance-marketplace-app") {
-          cd ./freelance-marketplace-app
-          git pull origin main
-        } else {
-          git clone https://github.com/maleeknoob/freelance-marketplace-app.git
-          cd freelance-marketplace-app
-        }
-      shell: powershell
     - name: Start Minikube
       run: |
         Write-Output "Starting Minikube..."
