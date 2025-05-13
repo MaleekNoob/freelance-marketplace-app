@@ -24,12 +24,33 @@ jobs:
     - name: Set up Docker to use Minikube's environment
       run: |
         Write-Output "Configuring Docker to use Minikube's daemon..."
-        & minikube -p minikube docker-env | Invoke-Expression
+        & minikube -p minikube docker-env --shell powershell | Invoke-Expression
         docker info --format '{{.ServerVersion}}'
       shell: powershell
-    - name: Login to Docker Hub
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+    - name: Check Docker Secrets
+      run: |
+        Write-Output "Checking Docker secrets..."
+        if (-not $env:DOCKER_USERNAME) {
+          Write-Output "ERROR: DOCKER_USERNAME is not set!"
+          exit 1
+        } else {
+          Write-Output "SUCCESS: DOCKER_USERNAME is set."
+        }
+        if (-not $env:DOCKER_PASSWORD) {
+          Write-Output "ERROR: DOCKER_PASSWORD is not set!"
+          exit 1
+        } else {
+          Write-Output "SUCCESS: DOCKER_PASSWORD is set."
+        }
       shell: powershell
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Build and Push Backend Image
       run: |
         cd backend
