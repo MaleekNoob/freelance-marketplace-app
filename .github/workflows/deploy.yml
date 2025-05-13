@@ -7,8 +7,8 @@ jobs:
   build-deploy:
     runs-on: self-hosted
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    # - name: Checkout code
+    #   uses: actions/checkout@v3
     - name: Set up Docker to use Minikube's environment
       run: |
         Write-Output "Configuring Docker to use Minikube's daemon..."
