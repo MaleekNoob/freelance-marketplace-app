@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-backend
+  namespace: my-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: project-backend
+  template:
+    metadata:
+      labels:
+        app: project-backend
+    spec:
+      containers:
+      - name: project-backend
+        image: maleeknoob/project-backend:latest
+        ports:
+        - containerPort: 5000
