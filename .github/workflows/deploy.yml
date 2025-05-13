@@ -8,12 +8,29 @@ jobs:
     runs-on: self-hosted
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4  # Updated to v4, retry with this
-      continue-on-error: true  # Allow workflow to proceed if checkout fails
+      uses: actions/checkout@v4
+      continue-on-error: true  # Fallback if checkout fails
+    - name: Fallback to manual pull
+      run: |
+        Write-Output "Ensuring latest code..."
+        if (Test-Path "./freelance-marketplace-app") {
+          cd ./freelance-marketplace-app
+          git pull origin main
+        } else {
+          git clone https://github.com/maleeknoob/freelance-marketplace-app.git
+          cd freelance-marketplace-app
+        }
+      shell: powershell
     - name: Start Minikube
       run: |
         Write-Output "Starting Minikube..."
-        minikube start --driver=docker --force || Write-Output "Minikube start failed, attempting to recover..."
+        try {
+          minikube start --driver=docker --force
+          Write-Output "Minikube started successfully"
+        } catch {
+          Write-Output "Minikube start failed: $_"
+          exit 1
+        }
         minikube status
       shell: powershell
     - name: Set up Docker to use Minikube's environment
