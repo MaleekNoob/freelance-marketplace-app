@@ -9,7 +9,7 @@ A full-stack freelance marketplace platform connecting clients with skilled free
 - **Proposal System** - Freelancers can submit proposals for available jobs
 - **Project Management** - Track project progress and communicate within the platform
 - **Secure Payments** - Integrated payment processing using Stripe
-- **Responsive Design** - Works on desktop and mobile devices.
+- **Responsive Design** - Works on desktop and mobile devices
 
 ## 🛠️ Tech Stack
 
